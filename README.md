@@ -2,8 +2,6 @@
 
 Link: https://random-playing-card-generator.netlify.app
 
-# Random Playing Card Generator
-
 This web application generates a random playing card image and name. It supports interval-based generation and allows the selection of different card stacks, including Tamariz, Aronson, or a new deck order. The application displays the stack number for the selected stack.
 
 ## Concepts Used
