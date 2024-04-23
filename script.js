@@ -287,7 +287,18 @@ let intervalId;
 let isGenerating = false;
 let currentStack = null;
 
-generateButton.addEventListener('click', generateRandomCard);
+generateButton.addEventListener('click', () => {
+  generateRandomCard();
+  if (!isGenerating) return;
+  isGenerating = false;
+  clearInterval(intervalId);
+  startButton.disabled = false;
+  stopButton.disabled = true;
+  spinner.style.display = 'none'; // Hide the spinner
+  let stackSelected = document.getElementById('stackSelect').value;
+
+  updateStackNumber(stackSelected);
+});
 
 startButton.addEventListener('click', () => {
   if (isGenerating) return;
@@ -297,6 +308,8 @@ startButton.addEventListener('click', () => {
   const interval = parseInt(intervalInput.value) * 1000;
   intervalId = setInterval(generateRandomCard, interval);
   spinner.style.display = 'inline-block'; // Show the spinner
+  let stackSelected = document.getElementById('stackSelect').value;
+  updateStackNumber(stackSelected);
 });
 
 stopButton.addEventListener('click', () => {
@@ -306,11 +319,6 @@ stopButton.addEventListener('click', () => {
   startButton.disabled = false;
   stopButton.disabled = true;
   spinner.style.display = 'none'; // Hide the spinner
-});
-
-stackSelect.addEventListener('change', () => {
-  currentStack = stackSelect.value;
-  updateStackNumber();
 });
 
 function generateRandomCard() {
@@ -326,33 +334,15 @@ function generateRandomCard() {
     ' (' +
     randomCardName.toUpperCase() +
     ')';
-  updateStackNumber();
-  stopButton();
+
+  let stackSelected = document.getElementById('stackSelect').value;
+
+  updateStackNumber(stackSelected);
 }
 
-function updateStackNumber() {
-  if (currentStack === 'None') {
-    stackNumber.textContent = ``;
-    return;
-  }
-
-  if (currentStack === 'NewDeck') {
-    stackNumber.textContent = 'Stack Number: 52';
-    return;
-  }
-
-  if (currentStack === 'Tamariz') {
-    stackNumber.textContent = 'Stack Number: 7';
-    return;
-  }
-
-  if (currentStack === 'Aronson') {
-    stackNumber.textContent = 'Stack Number: 6';
-    return;
-  }
-
+function updateStackNumber(stack_now) {
+  let currentStack = stack_now;
   let stack;
-  let as_val;
   switch (currentStack) {
     case 'Tamariz':
       stack = tamarizStack;
@@ -374,3 +364,34 @@ function updateStackNumber() {
     stackNumber.textContent = '';
   }
 }
+
+stackSelect.addEventListener('change', () => {
+  if (isGenerating) {
+    let stackSelected = document.getElementById('stackSelect').value;
+    updateStackNumber(stackSelected);
+  } else {
+    const selectedStack = stackSelect.value;
+    let stackIndex = -1;
+
+    switch (selectedStack) {
+      case 'Tamariz':
+        stackIndex = tamarizStack.indexOf('as');
+        break;
+      case 'Aronson':
+        stackIndex = aronsonStack.indexOf('as');
+        break;
+      case 'NewDeck':
+        stackIndex = newDeckOrder.indexOf('as');
+        break;
+      default:
+        stackIndex = null;
+        break;
+    }
+
+    if (stackIndex !== -1) {
+      stackNumber.textContent = `Stack Number: ${stackIndex + 1}`;
+    } else {
+      stackNumber.textContent = '';
+    }
+  }
+});
