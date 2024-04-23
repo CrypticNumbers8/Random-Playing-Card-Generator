@@ -218,6 +218,61 @@ const tamarizStack = [
   '9d',
 ];
 
+const newDeckOrder = [
+  'ah',
+  '2h',
+  '3h',
+  '4h',
+  '5h',
+  '6h',
+  '7h',
+  '8h',
+  '9h',
+  '10h',
+  'jh',
+  'qh',
+  'kh',
+  'ac',
+  '2c',
+  '3c',
+  '4c',
+  '5c',
+  '6c',
+  '7c',
+  '8c',
+  '9c',
+  '10c',
+  'jc',
+  'qc',
+  'kc',
+  'kd',
+  'qd',
+  'jd',
+  '10d',
+  '9d',
+  '8d',
+  '7d',
+  '6d',
+  '5d',
+  '4d',
+  '3d',
+  '2d',
+  'ad',
+  'ks',
+  'qs',
+  'js',
+  '10s',
+  '9s',
+  '8s',
+  '7s',
+  '6s',
+  '5s',
+  '4s',
+  '3s',
+  '2s',
+  'as',
+];
+
 const cardImage = document.getElementById('cardImage');
 const cardNameElement = document.getElementById('cardName');
 const generateButton = document.getElementById('generateButton');
@@ -277,7 +332,22 @@ function generateRandomCard() {
 
 function updateStackNumber() {
   if (currentStack === 'None') {
-    stackNumber.textContent = '';
+    stackNumber.textContent = ``;
+    return;
+  }
+
+  if (currentStack === 'NewDeck') {
+    stackNumber.textContent = 'Stack Number: 52';
+    return;
+  }
+
+  if (currentStack === 'Tamariz') {
+    stackNumber.textContent = 'Stack Number: 7';
+    return;
+  }
+
+  if (currentStack === 'Aronson') {
+    stackNumber.textContent = 'Stack Number: 6';
     return;
   }
 
@@ -286,12 +356,12 @@ function updateStackNumber() {
   switch (currentStack) {
     case 'Tamariz':
       stack = tamarizStack;
-      as_val = 7;
       break;
     case 'Aronson':
       stack = aronsonStack;
-      as_val = 6;
-
+      break;
+    case 'NewDeck':
+      stack = newDeckOrder;
       break;
     default:
       stack = null;
@@ -299,14 +369,6 @@ function updateStackNumber() {
 
   if (stack) {
     let stackIndex = stack.indexOf(cardImage.alt) + 1;
-    if (cardImage.src == 'Card_Images/as.svg') {
-      if (currentStack == tamarizStack) {
-        stackIndex = 7;
-      }
-      if (currentStack == aronsonStack) {
-        stackIndex = 6;
-      }
-    }
     stackNumber.textContent = `Stack Number: ${stackIndex}`;
   } else {
     stackNumber.textContent = '';
